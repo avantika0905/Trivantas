@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRIVANTAS - Business Tools</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a2530;
+            --secondary: #3498db;
+            --accent: #76c043;
+            --text-color: #2c3e50;
+            --text-light: #5f7488;
+            --bg-color: #f3f4f6;
+            --white: #ffffff;
+            --border-color: #e3e8ec;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: var(--primary);
+            /* Dark navbar for rich vibe & white logo visibility */
+            padding: 16px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .nav-logo {
+            height: 40px;
+            width: auto;
+            /* No filter, assuming logo needs dark bg */
+            display: block;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .nav-link {
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.2s;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-link.primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .nav-link.primary:hover {
+            background: #5fa032;
+            transform: translateY(-1px);
+        }
+
+        .nav-link svg {
+            width: 18px;
+            height: 18px;
+            stroke-width: 2;
+            fill: none;
+            stroke: currentColor;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar-small {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--secondary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-name-nav {
+            color: white;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: linear-gradient(180deg, var(--white) 0%, var(--bg-color) 100%);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-section p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* Cards Grid */
+        .cards-section {
+            padding: 60px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            flex: 1;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .section-title p {
+            color: var(--text-light);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 32px 24px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border-color: var(--secondary);
+        }
+
+        .card-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 24px;
+            color: var(--secondary);
+            background: rgba(52, 152, 219, 0.1);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-icon svg {
+            width: 32px;
+            height: 32px;
+            stroke-width: 2;
+            fill: none;
+            stroke: currentColor;
+        }
+
+        .card:nth-child(2) .card-icon {
+            color: var(--accent);
+            background: rgba(118, 192, 67, 0.1);
+        }
+
+        .card:nth-child(3) .card-icon {
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .card:nth-child(4) .card-icon {
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .card h3 {
+            font-size: 1.35rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+            line-height: 1.5;
+            flex: 1;
+        }
+
+        .card-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .card:hover .card-btn {
+            background: var(--secondary);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border-color);
+            background: var(--white);
+            margin-top: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 16px 20px;
+            }
+
+            .nav-logo {
+                height: 32px;
+            }
+
+            .nav-link span {
+                display: none;
+            }
+
+            .nav-link svg {
+                margin: 0;
+            }
+
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="nav-brand">
+            <img src="assets/logo.png" alt="TRIVANTAS" class="nav-logo">
+        </a>
+        <div class="nav-links" id="navLinks">
+            <!-- Dynamic content based on auth state -->
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero-section">
+        <h1>Business Tools</h1>
+        <p>Create professional business documents in minutes. Simple, fast, and free.</p>
+    </header>
+
+    <!-- Cards -->
+    <section class="cards-section">
+        <div class="section-title">
+            <h2>Select a Template</h2>
+            <p>Choose from our professionally designed templates</p>
+        </div>
+
+        <div class="grid">
+            <a href="quotation.html" class="card">
+                <span class="card-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                </span>
+                <h3>Quotation</h3>
+                <p>Create detailed price quotes for clients with item breakdowns.</p>
+                <span class="card-btn">Create New</span>
+            </a>
+
+            <a href="purchase-order.html" class="card">
+                <span class="card-icon">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="8" cy="21" r="1" />
+                        <circle cx="19" cy="21" r="1" />
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12" />
+                    </svg>
+                </span>
+                <h3>Purchase Order</h3>
+                <p>Order materials from suppliers with all specifications.</p>
+                <span class="card-btn">Create New</span>
+            </a>
+
+            <a href="proforma-invoice.html" class="card">
+                <span class="card-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+                        <path d="M9 14h6" />
+                        <path d="M9 18h6" />
+                        <path d="M9 10h6" />
+                    </svg>
+                </span>
+                <h3>Proforma Invoice</h3>
+                <p>Initial invoice for advance payment before delivery.</p>
+                <span class="card-btn">Create New</span>
+            </a>
+
+            <a href="tax-invoice.html" class="card">
+                <span class="card-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z" />
+                        <path d="M14 8H8" />
+                        <path d="M16 12H8" />
+                        <path d="M13 16H8" />
+                    </svg>
+                </span>
+                <h3>Tax Invoice</h3>
+                <p>Final GST compliant invoice for completed sales.</p>
+                <span class="card-btn">Create New</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        © 2024 Trivantas. All rights reserved.
+    </footer>
+
+    <script>
+        // Check auth state and update navigation
+        function updateNavigation() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            const navLinks = document.getElementById('navLinks');
+
+            if (token) {
+                // User is logged in
+                navLinks.innerHTML = `
+                    <a href="dashboard.html" class="nav-link">
+                        <svg viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="my-bills.html" class="nav-link">
+                        <svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+                        <span>My Bills</span>
+                    </a>
+                    <div class="user-menu" style="margin-left: 8px;">
+                        <div class="user-avatar-small">${(user.name || 'U')[0].toUpperCase()}</div>
+                    </div>
+                    <a href="#" class="nav-link" onclick="logout(); return false;">
+                        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </a>
+                `;
+            } else {
+                // User is not logged in
+                navLinks.innerHTML = `
+                    <a href="login.html" class="nav-link">Login</a>
+                    <a href="signup.html" class="nav-link primary">Sign Up Free</a>
+                `;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            updateNavigation();
+        }
+
+        document.addEventListener('DOMContentLoaded', updateNavigation);
+    </script>
+</body>
+
+</html>

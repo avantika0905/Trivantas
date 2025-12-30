@@ -1,0 +1,838 @@
+:root {
+    /* Brand Colors */
+    --primary-color: #1a2530;
+    /* Darker Navy/Slate */
+    --accent-color: #76c043;
+    /* Bright Green */
+    --secondary-color: #3498db;
+    /* Blue */
+
+    /* Text Colors */
+    --text-color: #2c3e50;
+    --text-light: #5f7488;
+
+    /* Backgrounds */
+    --bg-color: #f4f7f6;
+    --white: #ffffff;
+    --light-gray: #f8f9fa;
+    --table-header-bg: #1a2530;
+
+    /* Borders */
+    --border-color: #e3e8ec;
+
+    /* Typography */
+    --font-heading: 'Montserrat', 'Inter', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    /* Spacing */
+    --spacing-xs: 5px;
+    --spacing-sm: 10px;
+    --spacing-md: 20px;
+    --spacing-lg: 40px;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
+
+body {
+    font-family: var(--font-body);
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 40px 20px;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    line-height: 1.5;
+}
+
+.container {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0 auto;
+    background: var(--white);
+    padding: 0;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    border-radius: 2px;
+    /* Slight radius or 0 for paper feel */
+    position: relative;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+/* Decorative top bar */
+.top-bar {
+    height: 8px;
+    background: linear-gradient(90deg, var(--primary-color) 0%, var(--secondary-color) 50%, var(--accent-color) 100%);
+    width: 100%;
+}
+
+.content-wrapper {
+    padding: 40px;
+}
+
+/* Header Redesign */
+/* Header Redesign */
+header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    /* Reduced from 40px */
+    border-bottom: 2px solid var(--light-gray);
+    padding-bottom: 10px;
+    /* Reduced from 30px */
+    gap: 5px;
+    /* Reduced from 20px */
+}
+
+.brand-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.logo-section img {
+    max-width: 500px;
+    height: auto;
+    margin-bottom: 0px;
+    /* Reduced from 8px */
+}
+
+/* ... existing company-services ... */
+
+.document-info {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.document-title {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 5px;
+    /* Reduced from 20px */
+}
+
+.document-title h1 {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    color: var(--primary-color);
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+    opacity: 0.9;
+}
+
+.document-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.meta-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+}
+
+.meta-label {
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.meta-value {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Address Cards */
+.address-grid {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.address-box {
+    flex: 1;
+    background: var(--light-gray);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--secondary-color);
+    position: relative;
+}
+
+.address-box:first-child {
+    border-left-color: var(--primary-color);
+    /* Supplier / From */
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--text-light);
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+
+.address-content strong {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+    color: var(--primary-color);
+    font-family: var(--font-heading);
+    font-weight: 700;
+}
+
+.address-content p {
+    margin: 4px 0;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+/* Modern Table */
+.item-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.item-table th {
+    background-color: var(--table-header-bg);
+    color: var(--white);
+    font-weight: 600;
+    text-align: left;
+    padding: 15px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.item-table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.95rem;
+    color: var(--text-color);
+    vertical-align: top;
+}
+
+.item-table tr:last-child td {
+    border-bottom: none;
+}
+
+.item-table tr:nth-child(even) {
+    background-color: #fafbfd;
+}
+
+.item-table td strong {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+/* Dynamic Totals */
+.totals-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Align top */
+    margin-bottom: 20px;
+    /* Reduce bottom margin */
+    gap: 20px;
+}
+
+.totals-right-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    /* Align box and signature to right */
+    gap: 20px;
+    /* Space between totals box and signature */
+}
+
+.totals-box {
+    width: 320px;
+    background-color: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+.total-row span:nth-child(2) {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.total-row.final {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-top: 15px;
+    border-top: 2px solid var(--border-color);
+    font-weight: 700;
+}
+
+.total-row.final span {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+/* Footer & Terms */
+.footer-grid {
+    display: flex;
+    justify-content: flex-end;
+    /* Align signature to right */
+    gap: 40px;
+    padding-top: 10px;
+    border-top: 2px solid var(--light-gray);
+    page-break-inside: avoid;
+}
+
+.footer-left {
+    display: none;
+    /* Hide original left footer as it moved */
+}
+
+/* Style for box moved to totals section */
+.totals-left-content {
+    flex: 1;
+    max-width: 60%;
+}
+
+.totals-left-content .bank-box,
+.totals-left-content .terms-box {
+    margin-bottom: 0;
+    height: 100%;
+}
+
+.footer-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terms-box,
+.bank-box {
+    background: #fafbfd;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+}
+
+.terms-box ul {
+    margin: 0;
+    padding-left: 20px;
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.terms-box li {
+    margin-bottom: 4px;
+}
+
+.bank-info p {
+    margin: 3px 0;
+    font-size: 0.85rem;
+    color: var(--text-color);
+}
+
+.sign-area {
+    margin-top: 0;
+    /* Margin handled by flex gap */
+    text-align: center;
+    width: 100%;
+}
+
+.sign-line {
+    border-top: 2px solid var(--primary-color);
+    padding-top: 10px;
+    font-weight: 700;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    width: 80%;
+    margin: 0 auto;
+}
+
+/* Signature Visuals */
+.signature-visuals {
+    height: 100px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.signature-visuals img {
+    max-height: 80px;
+    max-width: 150px;
+    object-fit: contain;
+    display: none;
+    /* Hidden by default until loaded */
+    position: absolute;
+}
+
+.signature-img {
+    z-index: 1;
+    bottom: 5px;
+}
+
+.stamp-img {
+    z-index: 0;
+    opacity: 0.8;
+    right: 20px;
+    /* Offset stamp slightly */
+    transform: rotate(-5deg);
+    /* Natural stamp look */
+}
+
+/* Upload Controls - Visible only in Edit Mode */
+.upload-controls {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    width: 200px;
+}
+
+body.edit-mode .upload-controls {
+    display: flex;
+}
+
+.upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.upload-btn {
+    border: 1px dashed #ccc;
+    background: #f9f9f9;
+    color: #555;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    transition: all 0.2s;
+}
+
+.upload-btn:hover {
+    background: #e9ecef;
+    border-color: #bbb;
+}
+
+.remove-btn {
+    background: #ffcccc;
+    color: #cc0000;
+    border: 1px solid #ffaaaa;
+    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.remove-btn:hover {
+    background: #ffaaaa;
+    color: #aa0000;
+}
+
+.upload-input {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+@media print {
+    .upload-controls {
+        display: none !important;
+    }
+}
+
+/* Company Footer */
+.company-footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    font-size: 0.85rem;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.company-footer p {
+    margin: 2px 0;
+}
+
+/* Visual Indicator for Editable Fields */
+[contenteditable="true"] {
+    border-bottom: none;
+    cursor: default;
+    pointer-events: none;
+    transition: all 0.2s ease;
+}
+
+body.edit-mode [contenteditable="true"] {
+    border-bottom: 1.5px dashed #9ca3af;
+    cursor: text;
+    pointer-events: auto;
+    background-color: rgba(52, 152, 219, 0.05);
+}
+
+body.edit-mode [contenteditable="true"]:hover {
+    border-bottom-color: var(--secondary-color);
+    background-color: rgba(52, 152, 219, 0.1);
+}
+
+body.edit-mode [contenteditable="true"]:focus {
+    border-bottom: 2px solid var(--primary-color);
+    border-bottom-style: solid;
+    background-color: rgba(52, 152, 219, 0.2);
+    outline: none;
+}
+
+
+/* Print Optimization & PDF Generation Styles */
+@media print {
+    [contenteditable="true"] {
+        border-bottom: none !important;
+        background-color: transparent !important;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden;
+    }
+
+    body {
+        background: white;
+        font-size: 10pt;
+    }
+
+    .container {
+        box-shadow: none;
+        max-width: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: none;
+        overflow: visible;
+    }
+
+    .content-wrapper {
+        padding: 5px 15px !important;
+    }
+
+    header {
+        margin-bottom: 2px;
+        padding-bottom: 2px;
+        gap: 0px;
+    }
+
+    .document-title h1 {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+
+    .logo-section img {
+        max-height: 60px;
+        margin-bottom: 0;
+    }
+
+    .meta-item {
+        font-size: 0.75rem;
+        gap: 5px;
+        margin-bottom: 0;
+        line-height: 1.2;
+    }
+
+    .address-grid {
+        margin: 5px 0;
+        gap: 10px;
+    }
+
+    .address-box {
+        padding: 5px 8px;
+        border-left-width: 2px;
+    }
+
+    .item-table {
+        margin-bottom: 5px;
+    }
+
+    .item-table th,
+    .item-table td {
+        padding: 2px 4px;
+        font-size: 0.8rem;
+    }
+
+    .totals-section {
+        margin-bottom: 5px;
+        gap: 10px;
+    }
+
+    .totals-box {
+        padding: 5px 10px;
+        width: 220px;
+    }
+
+    .total-row {
+        margin-bottom: 4px;
+        font-size: 0.85rem;
+    }
+
+    .total-row.final {
+        margin-top: 8px;
+        padding-top: 5px;
+    }
+
+    .total-row.final span {
+        font-size: 1rem;
+    }
+
+    .footer-grid {
+        padding-top: 5px;
+        gap: 15px;
+        margin-top: 0;
+        border-top: 1px solid #eee;
+    }
+
+    .terms-box,
+    .bank-box {
+        padding: 8px;
+        margin-bottom: 5px;
+        border: 1px solid #eee;
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+
+    .terms-box ul,
+    .bank-info p {
+        font-size: 0.7rem;
+    }
+
+    .sign-area {
+        margin-top: 5px;
+    }
+
+    .signature-visuals {
+        height: 60px;
+    }
+
+    .signature-visuals img {
+        max-height: 50px;
+    }
+
+    .company-footer {
+        margin-top: 5px;
+        padding-top: 5px;
+        font-size: 0.7rem;
+    }
+
+    .upload-controls {
+        display: none !important;
+    }
+
+    .address-box,
+    .totals-box,
+    .item-table th {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+
+/* Explicit Styles for PDF Generation (Applied to Clone) */
+.print-mode {
+    background: white;
+    font-size: 10pt !important;
+}
+
+.print-mode [contenteditable="true"] {
+    border-bottom: none !important;
+    background-color: transparent !important;
+}
+
+.print-mode .container {
+    box-shadow: none;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    border: none;
+    overflow: visible;
+}
+
+.print-mode .content-wrapper {
+    padding: 5px 15px !important;
+}
+
+.print-mode header {
+    margin-bottom: 2px;
+    padding-bottom: 2px;
+    gap: 0px;
+}
+
+.print-mode .document-title h1 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.print-mode .logo-section img {
+    max-height: 60px;
+    margin-bottom: 0;
+}
+
+.print-mode .meta-item {
+    font-size: 0.75rem;
+    gap: 5px;
+    margin-bottom: 0;
+    line-height: 1.2;
+}
+
+.print-mode .address-grid {
+    margin: 5px 0;
+    gap: 10px;
+}
+
+.print-mode .address-box {
+    padding: 5px 8px;
+    border-left-width: 2px;
+}
+
+.print-mode .item-table {
+    margin-bottom: 5px;
+}
+
+.print-mode .item-table th,
+.print-mode .item-table td {
+    padding: 2px 4px;
+    font-size: 0.8rem;
+}
+
+.print-mode .totals-section {
+    margin-bottom: 5px;
+    gap: 10px;
+}
+
+.print-mode .totals-box {
+    padding: 5px 10px;
+    width: 220px;
+}
+
+.print-mode .total-row {
+    margin-bottom: 4px;
+    font-size: 0.85rem;
+}
+
+.print-mode .total-row.final {
+    margin-top: 8px;
+    padding-top: 5px;
+}
+
+.print-mode .total-row.final span {
+    font-size: 1rem;
+}
+
+.print-mode tr {
+    page-break-inside: avoid;
+}
+
+.print-mode .terms-box,
+.print-mode .bank-box {
+    padding: 8px;
+    margin-bottom: 5px;
+    border: 1px solid #eee;
+}
+
+.print-mode .terms-box ul,
+.print-mode .bank-info p {
+    font-size: 0.7rem;
+}
+
+.print-mode .sign-area {
+    margin-top: 5px;
+}
+
+.print-mode .signature-visuals {
+    height: 60px;
+}
+
+.print-mode .signature-visuals img {
+    max-height: 50px;
+}
+
+.print-mode .company-footer {
+    margin-top: 5px;
+    padding-top: 5px;
+    font-size: 0.7rem;
+}
+
+.print-mode .upload-controls {
+    display: none !important;
+}
+
+.print-mode .delete-col {
+    display: none !important;
+}
+
+/* Remove Browser Headers/Footers */
+@page {
+    margin: 0;
+}

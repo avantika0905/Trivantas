@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Invoice - TRIVANTAS</title>
+    <link rel="stylesheet" href="assets/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="top-bar"></div>
+        <div class="content-wrapper">
+            <!-- Header -->
+            <header>
+                <div class="brand-section">
+                    <div class="logo-section">
+                        <img src="assets/logo.png" alt="TRIVANTAS Logo">
+                    </div>
+
+                </div>
+
+                <div class="document-info">
+                    <div class="document-title">
+                        <h1>Tax Invoice</h1>
+                    </div>
+                    <div class="document-meta">
+                        <div class="meta-item">
+                            <span class="meta-label">Invoice No:</span>
+                            <span class="meta-value">TI2526T0001</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Invoice Date:</span>
+                            <span class="meta-value">December 13, 2024</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Buyer Order No:</span>
+                            <span class="meta-value">PO/2024/998</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Buyer Order Date:</span>
+                            <span class="meta-value">December 10, 2024</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-label">Challan No:</span>
+                            <span class="meta-value">DC-552</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Addresses -->
+            <div class="address-grid">
+                <div class="address-box">
+                    <div class="section-title">Billed By (Supplier)</div>
+                    <div class="address-content">
+                        <strong contenteditable="true">TRIVANTAS</strong>
+                        <div style="margin-bottom: 6px;">
+                            <span style="font-size: 0.8rem; color: black; font-weight: bold;">Billing
+                                Address:</span><br>
+                            <span contenteditable="true">Dabhade Garage, Bhadgaon, Jalgaon – 424105</span>
+                        </div>
+                        <div style="margin-bottom: 6px;">
+                            <span style="font-size: 0.8rem; color: black; font-weight: bold;">Shipping
+                                Address:</span><br>
+                            <span contenteditable="true">A-002, Utpal Classic, Bhukum, Pune – 412115</span>
+                        </div>
+                        <p>Email: <span contenteditable="true">sales@trivantas.com</span></p>
+                        <p>Phone: <span contenteditable="true">+91 8983845428</span></p>
+                        <p>State Code: <span contenteditable="true">27 (Maharashtra)</span></p>
+                        <p><strong>GSTIN: <span contenteditable="true">27ABCDE1234F1Z5</span></strong></p>
+                    </div>
+                </div>
+                <div class="address-box">
+                    <div class="section-title">Billed To (Recipient)</div>
+                    <div class="address-content">
+                        <strong contenteditable="true">Tech Innovations Pvt Ltd.</strong>
+                        <p><span contenteditable="true">Shed No. 5, IT Park</span></p>
+                        <p><span contenteditable="true">Hinjewadi, Pune - 411057</span></p>
+                        <p>State Code: <span contenteditable="true">27 (Maharashtra)</span></p>
+                        <p><strong>GSTIN: <span contenteditable="true">27PQRS9876T1Z5</span></strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items Table -->
+            <table class="item-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">Sr no.</th>
+                        <th style="width: 45%;">Description of Goods / Services</th>
+                        <th class="text-center" style="width: 10%;">HSN/SAC</th>
+                        <th class="text-center" style="width: 10%;">Qty</th>
+                        <th class="text-right" style="width: 15%;">Rate (₹)</th>
+                        <th class="text-right" style="width: 15%;">Amount (₹)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>
+                            <strong><span contenteditable="true">SPM - Special Purpose Machine</span></strong>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 4px;"><span
+                                    contenteditable="true">Automatic
+                                    drilling and tapping machine.</span></div>
+                        </td>
+                        <td class="text-center"><span contenteditable="true">8465</span></td>
+                        <td class="text-center"><span contenteditable="true">1</span></td>
+                        <td class="text-right"><span contenteditable="true">4,50,000.00</span></td>
+                        <td class="text-right"><span contenteditable="true">4,50,000.00</span></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>
+                            <strong><span contenteditable="true">Commissioning Charges</span></strong>
+                            <div style="font-size: 0.85rem; color: var(--text-light); margin-top: 4px;"><span
+                                    contenteditable="true">Service charge
+                                    for installation.</span></div>
+                        </td>
+                        <td class="text-center"><span contenteditable="true">9954</span></td>
+                        <td class="text-center"><span contenteditable="true">1</span></td>
+                        <td class="text-right"><span contenteditable="true">25,000.00</span></td>
+                        <td class="text-right"><span contenteditable="true">25,000.00</span></td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+            <!-- Totals -->
+            <div class="totals-section">
+                <!-- Left Content: Bank Details -->
+                <div class="totals-left-content">
+                    <div class="bank-box">
+                        <div class="section-title">Bank Details</div>
+                        <div class="bank-info">
+                            <p><strong>Bank Name:</strong> HDFC Bank Ltd.</p>
+                            <p><strong>A/c Name:</strong> TRIVANTAS</p>
+                            <p><strong>A/c No:</strong> 50200012345678</p>
+                            <p><strong>IFSC Code:</strong> HDFC0000123</p>
+                            <p><strong>Branch:</strong> MIDC Bhosari, Pune</p>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <div class="section-title" style="margin-bottom:5px; font-size:0.75rem;">Declaration</div>
+                            <p style="font-size: 0.75rem; margin:0; color:var(--text-light);">We declare that this
+                                invoice shows the actual price of the goods described and that all particulars are true
+                                and correct.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Content: Totals & Signature -->
+                <div class="totals-right-content">
+                    <div class="totals-box">
+                        <div class="total-row">
+                            <span>Discount</span>
+                            <span>₹ 0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Packing And Forwarding</span>
+                            <span>₹ 0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Transportation</span>
+                            <span>₹ 0.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>Taxable Value</span>
+                            <span>₹ 4,75,000.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>CGST (9%)</span>
+                            <span>₹ 42,750.00</span>
+                        </div>
+                        <div class="total-row">
+                            <span>SGST (9%)</span>
+                            <span>₹ 42,750.00</span>
+                        </div>
+                        <div class="total-row final">
+                            <span>Invoice Total</span>
+                            <span>₹ 5,60,500.00</span>
+                        </div>
+                        <div
+                            style="font-size: 0.75rem; margin-top: 10px; text-align: right; color: var(--text-light); font-style: italic;">
+                            (Rupees Five Lakh Sixty Thousand Five Hundred Only)
+                        </div>
+                    </div>
+
+                    <div class="sign-area">
+                        <!-- Signature Visuals Container -->
+                        <div class="signature-visuals">
+                            <!-- Upload Controls (Visible in Edit Mode) -->
+                            <div class="upload-controls">
+                                <div class="upload-btn-wrapper">
+                                    <button class="upload-btn">Upload Signature</button>
+                                    <input type="file" class="upload-input"
+                                        onchange="handleImageUpload(this, 'signature-img')" accept="image/*">
+                                    <button class="remove-btn" onclick="deleteImage('signature-img')"
+                                        title="Remove">×</button>
+                                </div>
+                                <div class="upload-btn-wrapper">
+                                    <button class="upload-btn">Upload Stamp</button>
+                                    <input type="file" class="upload-input"
+                                        onchange="handleImageUpload(this, 'stamp-img')" accept="image/*">
+                                    <button class="remove-btn" onclick="deleteImage('stamp-img')"
+                                        title="Remove">×</button>
+                                </div>
+                            </div>
+
+                            <!-- Images -->
+                            <img id="signature-img" class="signature-img" src="" alt="Signature">
+                            <img id="stamp-img" class="stamp-img" src="" alt="Stamp">
+                        </div>
+
+                        <div class="sign-line">
+                            For TRIVANTAS<br>
+                            <span style="font-size: 0.75rem; font-weight: 400; color:var(--text-color);">Authorized
+                                Signatory</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Company Footer -->
+            <div class="company-footer">
+                <p>📞 +91 8983845428 | ✉️ <a href="mailto:sales@trivantas.com"
+                        style="text-decoration:none; color:inherit;">sales@trivantas.com</a> | 🌐 <a
+                        href="https://www.trivantas.com" style="text-decoration:none; color:inherit;">trivantas.com</a>
+                </p>
+                <p>📍 A-002, Utpal Classic, Bhukum, Pune. 412115.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Web App Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="assets/app.js"></script>
+</body>
+
+</html>

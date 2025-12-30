@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Bill - TRIVANTAS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        body {
+            background-color: #f1f5f9;
+        }
+
+        .container {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            font-family: 'Inter', sans-serif;
+            color: #64748b;
+        }
+
+        .view-header {
+            max-width: 210mm;
+            margin: 20px auto;
+            padding: 0 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #475569;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            transition: color 0.2s;
+            padding: 10px 16px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .back-btn:hover {
+            color: #2563eb;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .action-btn.edit {
+            background: #10b981;
+            color: white;
+        }
+
+        .action-btn.edit:hover {
+            background: #059669;
+        }
+
+        .action-btn.download {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .action-btn.download:hover {
+            background: #2563eb;
+        }
+
+        .action-btn.delete {
+            background: #ef4444;
+            color: white;
+        }
+
+        .action-btn.delete:hover {
+            background: #dc2626;
+        }
+
+        .bill-meta {
+            max-width: 210mm;
+            margin: 0 auto 20px;
+            padding: 16px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .meta-item-view {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .meta-label-view {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value-view {
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .type-badge {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .type-badge.quotation {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .type-badge.tax-invoice {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .type-badge.proforma-invoice {
+            background: rgba(139, 92, 246, 0.1);
+            color: #8b5cf6;
+        }
+
+        .type-badge.purchase-order {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="view-header">
+        <a href="my-bills.html" class="back-btn">← Back to My Bills</a>
+        <div class="action-buttons" id="actionButtons">
+            <!-- Dynamic buttons -->
+        </div>
+    </div>
+
+    <div class="bill-meta" id="billMeta" style="display: none;">
+        <!-- Bill metadata -->
+    </div>
+
+    <div id="bill-container">
+        <div class="loading">Loading bill...</div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="assets/app.js"></script>
+    <script>
+        // API_URL is defined in app.js, or redefined here if needed but app.js has it.
+        // We need local definition if app.js is not loaded yet or to be safe.
+        // const API_URL = 'http://localhost:5001'; // Let's use app.js's one if possible, or redefine.
+        // app.js is loaded synchronously above, so initialization runs.
+        // BUT app.js has 'initApp()' on DOMContentLoaded. We should be careful not to double run or conflict.
+        // app.js expects #app-toolbar. view-bill doesn't have it initially. app.js injects it.
+        // view-bill might NOT want toolbar?
+        // Actually, app.js logic is helpful for downloadPDF.
+
+        let currentBill = null;
+
+        const typeLabelsView = { // renamed to avoid conflict if app.js has it
+            'quotation': 'Quotation',
+            'tax-invoice': 'Tax Invoice',
+            'purchase-order': 'Purchase Order',
+            'proforma-invoice': 'Proforma Invoice'
+        };
+
+        const typeToPageView = {
+            'quotation': 'quotation.html',
+            'tax-invoice': 'tax-invoice.html',
+            'purchase-order': 'purchase-order.html',
+            'proforma-invoice': 'proforma-invoice.html'
+        };
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const params = new URLSearchParams(window.location.search);
+            const billId = params.get('id');
+            const autoDownload = params.get('download') === 'true';
+
+            if (!billId) {
+                document.getElementById('bill-container').innerHTML = '<div class="loading">No Bill ID provided.</div>';
+                return;
+            }
+
+            try {
+                // Remove app.js toolbar injection if present/undesired, or let it be. 
+                // app.js injects toolbar on DOMContentLoaded.
+                // We might need to hide it if we are in view mode? 
+                // app.js CSS hides it for print.
+                // For view mode, we probably don't want the floating toolbar.
+                // We can remove it:
+                const tb = document.getElementById('app-toolbar');
+                if (tb) tb.style.display = 'none';
+
+                const response = await fetch(`${API_URL}/api/bill/${billId}`);
+                if (!response.ok) throw new Error('Bill not found');
+
+                currentBill = await response.json();
+
+                // Render metadata
+                const metaDiv = document.getElementById('billMeta');
+                metaDiv.style.display = 'flex';
+                metaDiv.innerHTML = `
+                    <div class="meta-item-view">
+                        <span class="meta-label-view">Invoice No</span>
+                        <span class="meta-value-view">${currentBill.invoiceNo}</span>
+                    </div>
+                    <div class="meta-item-view">
+                        <span class="meta-label-view">Client</span>
+                        <span class="meta-value-view">${currentBill.buyerName}</span>
+                    </div>
+                    <div class="meta-item-view">
+                        <span class="meta-label-view">Amount</span>
+                        <span class="meta-value-view" style="color: #10b981;">${currentBill.totalAmount}</span>
+                    </div>
+                    <div class="meta-item-view">
+                        <span class="meta-label-view">Date</span>
+                        <span class="meta-value-view">${new Date(currentBill.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                    </div>
+                    <span class="type-badge ${currentBill.billType}">${typeLabelsView[currentBill.billType] || currentBill.billType}</span>
+                `;
+
+                // Update document title for PDF filename
+                document.title = `${currentBill.invoiceNo} - ${typeLabelsView[currentBill.billType] || 'Bill'}`;
+
+                // Render action buttons
+                const actionsDiv = document.getElementById('actionButtons');
+                let actionsHtml = `
+                    <button class="action-btn edit" onclick="editBill()">
+                        <span>✏️</span> Edit
+                    </button>
+                    <button class="action-btn download" onclick="downloadPDF()">
+                        <span>⬇️</span> Download PDF
+                    </button>
+                    <button class="action-btn delete" onclick="deleteBillView()">
+                        <span>🗑️</span> Delete
+                    </button>
+                `;
+
+                actionsDiv.innerHTML = actionsHtml;
+
+                // Render Content
+                const containerHtml = `
+                    <div class="container">
+                        <div class="top-bar"></div>
+                        <div class="content-wrapper">
+                            ${currentBill.content.html}
+                        </div>
+                    </div>
+                 `;
+
+                document.getElementById('bill-container').innerHTML = containerHtml;
+
+                // Disable contentEditable logic
+                document.querySelectorAll('[contenteditable]').forEach(el => el.contentEditable = false);
+
+                // Auto Download if requested
+                if (autoDownload) {
+                    setTimeout(() => downloadPDF(), 1000); // Small delay to ensure render
+                }
+
+            } catch (error) {
+                console.error(error);
+                document.getElementById('bill-container').innerHTML = `<div class="loading" style="color:red;">Error loading bill: ${error.message}</div>`;
+            }
+        });
+
+        function editBill() {
+            if (!currentBill) return;
+            const page = typeToPageView[currentBill.billType] || 'tax-invoice.html';
+            window.location.href = `${page}?edit=${currentBill._id}`;
+        }
+
+        async function deleteBillView() { // Renamed to avoid collision if app.js has deleteBill
+            if (!currentBill) return;
+            if (!confirm('Are you sure you want to delete this bill? This action cannot be undone.')) return;
+
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Please login to perform this action.');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/api/bills/${currentBill._id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    alert('Bill deleted successfully!');
+                    window.location.href = 'my-bills.html';
+                } else {
+                    const data = await response.json();
+                    alert('Error: ' + (data.msg || 'Failed to delete'));
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Failed to delete bill. Please try again.');
+            }
+        }
+    </script>
+</body>
+
+</html>
