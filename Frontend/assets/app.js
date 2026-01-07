@@ -3,7 +3,7 @@
  * Enhanced with JWT auth, Cloudinary PDF upload, and bill editing
  */
 
-const API_URL = 'http://localhost:5001';
+const API_URL = 'https://trivantas.onrender.com';
 
 // Get bill type from current page URL
 function getBillType() {
