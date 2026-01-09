@@ -158,14 +158,14 @@ header {
 /* Address Cards */
 .address-grid {
     display: flex;
-    gap: 30px;
-    margin-bottom: 40px;
+    gap: 10px;
+    margin-bottom: 30px;
 }
 
 .address-box {
     flex: 1;
     background: var(--light-gray);
-    padding: 20px;
+    padding: 15px;
     border-radius: 8px;
     border-left: 4px solid var(--secondary-color);
     position: relative;
@@ -182,13 +182,13 @@ header {
     text-transform: uppercase;
     color: var(--text-light);
     letter-spacing: 1px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     font-weight: 700;
 }
 
 .address-content strong {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     font-size: 1.05rem;
     color: var(--primary-color);
     font-family: var(--font-heading);
@@ -196,9 +196,10 @@ header {
 }
 
 .address-content p {
-    margin: 4px 0;
+    margin: 1px 0;
     font-size: 0.9rem;
     color: var(--text-color);
+    line-height: 1.3;
 }
 
 /* Modern Table */
