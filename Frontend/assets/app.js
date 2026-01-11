@@ -616,7 +616,215 @@ function addNewRow() {
  * Basic Auto-calculation logic
  */
 function setupCalculations() {
-    // Placeholder for future calculation logic
+    // Event delegation for table inputs
+    const table = document.querySelector('.item-table');
+    if (table) {
+        table.addEventListener('input', (e) => {
+            if (e.target.isContentEditable || e.target.tagName === 'INPUT') {
+                calculateTotals();
+            }
+        });
+    }
+
+    // Event delegation for totals section (Discount, Packing, etc.)
+    const totalsBox = document.querySelector('.totals-box');
+    if (totalsBox) {
+        totalsBox.addEventListener('input', (e) => {
+            if (e.target.isContentEditable || e.target.tagName === 'INPUT') {
+                calculateTotals();
+            }
+        });
+    }
+}
+
+/**
+ * Main Calculation Logic
+ */
+function calculateTotals() {
+    const rows = document.querySelectorAll('.item-table tbody tr');
+    let subTotal = 0;
+
+    // 1. Calculate Row Totals
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        // Indices based on standard layout (Sr, Desc, HSN, Qty, Rate, Amount)
+        // Adjust if delete column exists (it's appended at end, so indices stay same)
+
+        if (cells.length >= 6) {
+            const qtyCell = cells[3]; // Qty
+            const rateCell = cells[4]; // Rate
+            const amountCell = cells[5]; // Amount
+
+            const qty = parseNumber(qtyCell.innerText);
+            const rate = parseNumber(rateCell.innerText);
+
+            const amount = qty * rate;
+
+            // Update Row Amount if it differs (avoid cursor jumps if we can, but innerText update resets cursor)
+            // Only update if not currently focused to avoid cursor issues, OR just update
+            // For contenteditable, updating innerText ruins focus. 
+            // Better: Update only if value changed significantly and user is NOT typing in that specific cell?
+            // Actually, usually Amount is calculated, user edits Qty/Rate.
+
+            if (amountCell && document.activeElement !== amountCell) {
+                amountCell.innerText = formatCurrency(amount);
+            }
+
+            subTotal += amount;
+        }
+    });
+
+    // 2. Calculate Global Totals
+    // We need to find the specific rows in .totals-box. They don't have unique IDs, so we rely on order or text.
+    // Structure: .total-row -> span:first-child (label), span:last-child (value)
+
+    const totalRows = document.querySelectorAll('.totals-box .total-row');
+    let taxableValue = subTotal;
+    let cgst = 0;
+    let sgst = 0;
+    let grandTotal = 0;
+
+    // Helper to find value element by label text (partial match)
+    const getValueEl = (labelPart) => {
+        for (let row of totalRows) {
+            const label = row.querySelector('span:first-child')?.innerText.toLowerCase() || '';
+            if (label.includes(labelPart.toLowerCase())) {
+                return row.querySelector('span:last-child');
+            }
+        }
+        return null;
+    };
+
+    // Packing & Forwarding / Transportation / Discount
+    const subTotalEl = getValueEl('Sub Total');
+    const discountEl = getValueEl('Discount');
+    const packingEl = getValueEl('Packing');
+    const transportEl = getValueEl('Transportation');
+    const taxableEl = getValueEl('Taxable');
+    const cgstEl = getValueEl('CGST');
+    const sgstEl = getValueEl('SGST'); // Or IGST
+    const igstEl = getValueEl('IGST');
+    const totalEl = document.querySelector('.total-row.final span:last-child');
+
+    const discount = discountEl ? parseNumber(discountEl.innerText) : 0;
+    const packing = packingEl ? parseNumber(packingEl.innerText) : 0;
+    const transport = transportEl ? parseNumber(transportEl.innerText) : 0;
+
+    if (subTotalEl && document.activeElement !== subTotalEl) {
+        subTotalEl.innerText = formatCurrency(subTotal);
+    }
+
+    // Logic: Subtotal is sum of items. 
+    // Usually Taxable Value = Subtotal + Packing + Transport - Discount.
+    // Note: Sometimes Discount is applied before tax, sometimes after. Assuming before tax.
+
+    taxableValue = subTotal + packing + transport - discount;
+
+    // Update Taxable Value Display
+    if (taxableEl && document.activeElement !== taxableEl) {
+        taxableEl.innerText = formatCurrency(taxableValue);
+    }
+
+    // Calculate Tax (9% + 9% or 18%)
+    // Check which tax lines exist to decide logic
+    if (cgstEl && sgstEl) {
+        cgst = taxableValue * 0.09;
+        sgst = taxableValue * 0.09;
+
+        if (document.activeElement !== cgstEl) cgstEl.innerText = formatCurrency(cgst);
+        if (document.activeElement !== sgstEl) sgstEl.innerText = formatCurrency(sgst);
+
+        grandTotal = taxableValue + cgst + sgst;
+    } else if (igstEl) {
+        const igst = taxableValue * 0.18;
+        if (document.activeElement !== igstEl) igstEl.innerText = formatCurrency(igst);
+        grandTotal = taxableValue + igst;
+    } else {
+        // Fallback if no tax rows found
+        grandTotal = taxableValue;
+    }
+
+    // Update Grand Total
+    if (totalEl) {
+        totalEl.innerText = formatCurrency(grandTotal);
+    }
+
+    // Update Words
+    const wordsEl = document.querySelector('.totals-box div[style*="font-style: italic"]');
+    if (wordsEl) {
+        wordsEl.innerText = `(Rupees ${numberToWords(Math.round(grandTotal))} Only)`;
+    }
+}
+
+// Utility: Parse flexible number strings (e.g. "1,234.00", "₹ 500")
+function parseNumber(str) {
+    if (!str) return 0;
+    // Remove non-numeric chars except dot and minus
+    const clean = str.replace(/[^\d.-]/g, '');
+    return parseFloat(clean) || 0;
+}
+
+// Utility: Format number to Indian Currency
+function formatCurrency(num) {
+    return '₹ ' + num.toLocaleString('en-IN', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+}
+
+// Utility: Number to Words (Indian Numbering System)
+function numberToWords(n) {
+    if (n === 0) return "Zero";
+
+    const units = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"];
+    const teens = ["Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"];
+    const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+
+    const convertChunk = (num) => {
+        let str = "";
+        if (num > 99) {
+            str += units[Math.floor(num / 100)] + " Hundred ";
+            num %= 100;
+        }
+        if (num > 19) {
+            str += tens[Math.floor(num / 10)] + " ";
+            num %= 10;
+        }
+        if (num > 0) {
+            if (num < 10) str += units[num];
+            else if (num >= 10 && num < 20) str += teens[num - 10];
+        }
+        return str.trim();
+    };
+
+    let result = "";
+
+    // Split into Crore, Lakh, Thousand, Rest
+    // n is roughly max 99 Crore for this app
+
+    const crore = Math.floor(n / 10000000);
+    n %= 10000000;
+
+    const lakh = Math.floor(n / 100000);
+    n %= 100000;
+
+    const thousand = Math.floor(n / 1000);
+    n %= 1000;
+
+    if (crore > 0) {
+        result += convertChunk(crore) + " Crore ";
+    }
+    if (lakh > 0) {
+        result += convertChunk(lakh) + " Lakh ";
+    }
+    if (thousand > 0) {
+        result += convertChunk(thousand) + " Thousand ";
+    }
+    if (n > 0) {
+        result += convertChunk(n);
+    }
+
+    return result.trim();
 }
 
 /**
