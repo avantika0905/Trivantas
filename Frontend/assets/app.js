@@ -62,6 +62,7 @@ async function loadBillForEdit(billId) {
 
             // Re-setup delete columns for loaded content
             setupDeleteColumns();
+            setupCalculations();
 
             // Store bill ID for update
             window.currentBillId = billId;
