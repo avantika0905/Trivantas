@@ -34,6 +34,7 @@ async function initApp() {
     injectToolbar();
     setupCalculations();
     setupDeleteColumns();
+    setCurrentDate();
 
     // Check if editing existing bill
     const editId = getEditBillId();
@@ -62,6 +63,8 @@ async function loadBillForEdit(billId) {
 
             // Re-setup delete columns for loaded content
             setupDeleteColumns();
+            ensureTaxRows();
+            reformatSavedBillDate();
             setupCalculations();
 
             // Store bill ID for update
@@ -726,24 +729,32 @@ function calculateTotals() {
         taxableEl.innerText = formatCurrency(taxableValue);
     }
 
-    // Calculate Tax (9% + 9% or 18%)
+    // Calculate Tax - Dynamic based on label (e.g., "CGST (9%)")
+    const getRateFromLabel = (valEl) => {
+        if (!valEl) return 0;
+        const labelSpan = valEl.previousElementSibling;
+        if (!labelSpan) return 0;
+        const text = labelSpan.innerText || '';
+        const match = text.match(/(\d+(\.\d+)?)\s*%/);
+        return match ? parseFloat(match[1]) / 100 : 0;
+    };
+
     // Check which tax lines exist to decide logic
-    if (cgstEl && sgstEl) {
-        cgst = taxableValue * 0.09;
-        sgst = taxableValue * 0.09;
+    // We now sum all present tax rows. If a row is hidden or 0%, it adds 0. (Dynamic formulation)
+    const cgstRate = cgstEl ? (getRateFromLabel(cgstEl) || 0) : 0;
+    const sgstRate = sgstEl ? (getRateFromLabel(sgstEl) || 0) : 0;
+    // Default IGST to 0 if no % found, unless we want a default. Here we assume 0 unless specified.
+    const igstRate = igstEl ? (getRateFromLabel(igstEl) || 0) : 0;
 
-        if (document.activeElement !== cgstEl) cgstEl.innerText = formatCurrency(cgst);
-        if (document.activeElement !== sgstEl) sgstEl.innerText = formatCurrency(sgst);
+    cgst = taxableValue * cgstRate;
+    sgst = taxableValue * sgstRate;
+    const igst = taxableValue * igstRate;
 
-        grandTotal = taxableValue + cgst + sgst;
-    } else if (igstEl) {
-        const igst = taxableValue * 0.18;
-        if (document.activeElement !== igstEl) igstEl.innerText = formatCurrency(igst);
-        grandTotal = taxableValue + igst;
-    } else {
-        // Fallback if no tax rows found
-        grandTotal = taxableValue;
-    }
+    if (cgstEl && document.activeElement !== cgstEl) cgstEl.innerText = formatCurrency(cgst);
+    if (sgstEl && document.activeElement !== sgstEl) sgstEl.innerText = formatCurrency(sgst);
+    if (igstEl && document.activeElement !== igstEl) igstEl.innerText = formatCurrency(igst);
+
+    grandTotal = taxableValue + cgst + sgst + igst;
 
     // Update Grand Total
     if (totalEl) {
@@ -754,6 +765,120 @@ function calculateTotals() {
     const wordsEl = document.querySelector('.totals-box div[style*="font-style: italic"]');
     if (wordsEl) {
         wordsEl.innerText = `(Rupees ${numberToWords(Math.round(grandTotal))} Only)`;
+    }
+}
+
+
+/**
+ * Sets the current date on elements with class 'current-date'
+ */
+function setCurrentDate() {
+    const dateElements = document.querySelectorAll('.current-date');
+    if (dateElements.length === 0) return;
+
+    const options = { day: 'numeric', month: 'long', year: 'numeric' };
+    const today = new Date().toLocaleDateString('en-GB', options);
+
+    dateElements.forEach(el => {
+        // Only set if content is not already edited/different (optional refinement, but per requirement "actual date of that day should be displayed")
+        // The plan says: New bills = today's date, Edited bills = saved date (because loadBillForEdit overwrites HTML).
+        // So we just set it here.
+        el.innerText = today;
+    });
+}
+
+/**
+ * Ensures Tax rows (CGST, SGST, IGST) exist in the totals box.
+ * Used when loading older saved bills that might lack these specific rows.
+ */
+function ensureTaxRows() {
+    const totalsBox = document.querySelector('.totals-box');
+    if (!totalsBox) return;
+
+    const finalRow = totalsBox.querySelector('.total-row.final');
+    if (!finalRow) return;
+
+    const hasRow = (text) => {
+        return Array.from(totalsBox.querySelectorAll('.total-row span:first-child'))
+            .some(span => span.innerText.includes(text));
+    };
+
+    const createRow = (label, value) => {
+        const div = document.createElement('div');
+        div.className = 'total-row';
+        div.innerHTML = `<span>${label}</span><span>${value}</span>`;
+        return div;
+    };
+
+    // Helper to find the next sibling to insert before
+    const getRef = () => {
+        // We want order: CGST, SGST, IGST, Final.
+        // So validation is reverse.
+        // If we are inserting IGST, ref is Final.
+        // If we are inserting SGST, ref is IGST or Final.
+        // If we are inserting CGST, ref is SGST or IGST or Final.
+        return finalRow; // Simplified logic, distinct insertions below
+    };
+
+    // Strategy: Insert in valid order relative to Final Row.
+    // 1. Check/Insert IGST (Before Final)
+    if (!hasRow('IGST')) {
+        totalsBox.insertBefore(createRow('IGST (0%)', '₹ 0.00'), finalRow);
+    }
+
+    // 2. Check/Insert SGST (Before IGST if exists, else Final)
+    // Find IGST again just in case we just added it
+    let igstRow = Array.from(totalsBox.querySelectorAll('.total-row')).find(r => r.innerText.includes('IGST'));
+    let sgstRef = igstRow || finalRow;
+
+    if (!hasRow('SGST')) {
+        totalsBox.insertBefore(createRow('SGST (0%)', '₹ 0.00'), sgstRef);
+    }
+
+    // 3. Check/Insert CGST (Before SGST if exists, else IGST, else Final)
+    let sgstRow = Array.from(totalsBox.querySelectorAll('.total-row')).find(r => r.innerText.includes('SGST'));
+    // igstRow might be stale if we didn't search again? No, DOM is live or we re-query.
+    // Re-query to be safe
+    igstRow = Array.from(totalsBox.querySelectorAll('.total-row')).find(r => r.innerText.includes('IGST'));
+
+    let cgstRef = sgstRow || igstRow || finalRow;
+
+    if (!hasRow('CGST')) {
+        totalsBox.insertBefore(createRow('CGST (0%)', '₹ 0.00'), cgstRef);
+    }
+}
+
+/**
+ * Reformats the date in saved bills to match the new standard (DD Month YYYY).
+ * e.g., "December 13, 2024" -> "13 December 2024"
+ */
+function reformatSavedBillDate() {
+    // 1. Try to find the element with 'current-date' class (if it was added in a previous partial update)
+    let dateEl = document.querySelector('.current-date');
+
+    // 2. If not found, look for standard structure: .meta-label "Date:" or "Invoice Date:" -> .meta-value
+    if (!dateEl) {
+        const labels = document.querySelectorAll('.meta-label');
+        for (let label of labels) {
+            const text = label.innerText.toLowerCase();
+            if (text.includes('date') && !text.includes('order')) { // Avoid "Buyer Order Date" unless it IS the bill date? Usually "Invoice Date" or just "Date"
+                dateEl = label.nextElementSibling;
+                // Add the class for future consistency
+                if (dateEl) dateEl.classList.add('current-date');
+                break;
+            }
+        }
+    }
+
+    if (dateEl) {
+        let dateStr = dateEl.innerText.trim();
+        // Check if it's already in the correct format (starts with number) or needs conversion
+        // Simple check: create Date object and output in new format
+        const dateObj = new Date(dateStr);
+        if (!isNaN(dateObj.getTime())) {
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            dateEl.innerText = dateObj.toLocaleDateString('en-GB', options);
+        }
     }
 }
 
