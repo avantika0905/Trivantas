@@ -374,7 +374,7 @@ function toggleEditMode() {
     isEditMode = !isEditMode;
     const btn = document.getElementById('btn-edit');
     // Using [contenteditable] and specific others. Removing generic td/p to prevent double-border and Sr No editing.
-    const editableElements = document.querySelectorAll('[contenteditable], .editable, h1, .meta-value, .bank-info p, .terms-list li, .total-row span');
+    const editableElements = document.querySelectorAll('[contenteditable], .editable, h1, .meta-value, .bank-info p, .total-row span');
 
     editableElements.forEach(el => {
         el.contentEditable = isEditMode;
