@@ -404,7 +404,7 @@
     </main>
 
     <script>
-        const API_URL = 'http://localhost:5001';
+        const API_URL = 'https://trivantas.onrender.com';
         let allBills = [];
 
         function checkAuth() {
@@ -466,20 +466,6 @@
             }
         }
 
-        function getDisplayName(bill) {
-            // For older POs, the buyerName might be "Trivantas" while the actual Vendor is in the content
-            if (bill.billType === 'purchase-order' && bill.buyerName === 'Trivantas' && bill.content && bill.content.html) {
-                // Quick extraction from content: first address box content
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(bill.content.html, 'text/html');
-                const vendorName = doc.querySelector('.address-box .address-content strong')?.innerText;
-                if (vendorName && vendorName !== 'Trivantas') {
-                    return vendorName;
-                }
-            }
-            return bill.buyerName || 'Unknown Client';
-        }
-
         function renderBills(bills) {
             const grid = document.getElementById('billsGrid');
 
@@ -516,7 +502,7 @@
                     <div class="bill-card-header">
                         <div>
                             <div class="bill-invoice-no">${bill.invoiceNo}</div>
-                            <div class="bill-buyer">${getDisplayName(bill)}</div>
+                            <div class="bill-buyer">${bill.buyerName}</div>
                         </div>
                         <span class="type-badge ${typeColors[bill.billType] || 'blue'}">${typeLabels[bill.billType] || bill.billType}</span>
                     </div>

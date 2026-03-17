@@ -3,7 +3,7 @@
  * Enhanced with JWT auth, Cloudinary PDF upload, and bill editing
  */
 
-const API_URL = 'http://localhost:5001';
+const API_URL = 'https://trivantas.onrender.com';
 
 // Get bill type from current page URL
 function getBillType() {
@@ -966,17 +966,9 @@ async function saveBill() {
 
     const invoiceNo = document.querySelector('.meta-item:nth-child(1) .meta-value')?.innerText || 'Unknown';
     const invoiceDate = document.querySelector('.meta-item:nth-child(2) .meta-value')?.innerText || 'Unknown';
-    const billType = getBillType();
-    const addressBoxes = document.querySelectorAll('.address-box');
-    let buyerName;
-    
-    if (billType === 'purchase-order') {
-        buyerName = addressBoxes[0]?.querySelector('.address-content strong')?.innerText || 'Unknown Vendor';
-    } else {
-        buyerName = addressBoxes[1]?.querySelector('.address-content strong')?.innerText || 'Unknown Client';
-    }
-
+    const buyerName = document.querySelectorAll('.address-box')[1]?.querySelector('.address-content strong')?.innerText || 'Unknown Client';
     const totalAmount = document.querySelector('.total-row.final span:last-child')?.innerText || '0.00';
+    const billType = getBillType();
     const contentHtml = document.querySelector('.content-wrapper').innerHTML;
 
     const payload = {
